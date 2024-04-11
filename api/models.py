@@ -1,19 +1,16 @@
 from django.db import models
 
-class Restaurant(models.Model):
-    name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    # направление кухни: грузинская, украинская, армянская...
-    direction = models.CharField(max_length=255)
-    description = models.TextField
-    # для логирования
-    time_create = models.DateTimeField(auto_now_add=True)
+class Category(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.CharField(max_length=1000)
+    # Для логирования
+    time_create = models.DateTimeField(auto_now=True)
     time_update = models.DateTimeField(auto_now=True)
+    is_published = models.BooleanField(default=True)
 
-class Order(models.Model):
-    user_name = models.CharField(max_length=255)
-    user_id = models.IntegerField
-    user_email = models.EmailField
-    text = models.TextField
-    time_create = models.DateTimeField(auto_now_add=True)
-    time_update = models.DateTimeField(auto_now=True)
+    # Для отображения названий
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('post', kwargs={'post_id': self.pk})
