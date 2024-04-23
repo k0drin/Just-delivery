@@ -15,3 +15,6 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ['id', 'name', 'description', 'price']
+
+class EmptySerializer(serializers.Serializer):
+    pass

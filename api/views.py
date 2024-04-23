@@ -1,7 +1,15 @@
-from rest_framework import generics
+import redis
+from rest_framework import generics, status
+from rest_framework.response import Response
 from .models import *
 from django.db.models import Model
-from .serializers import CategorySerializer, UserSrializer, ItemSerializer
+from .serializers import CategorySerializer, UserSrializer, ItemSerializer, EmptySerializer
+
+# Connecting to redis
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
+redis_connection = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
 class CategoryAPIView(generics.ListAPIView):
         queryset = Category.objects.all()
@@ -10,10 +18,6 @@ class CategoryAPIView(generics.ListAPIView):
 class UserAPIView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSrializer
-
-#class CategoryItemsListView(generics.ListAPIView):
-#    queryset = Item.objects.all()
-#    serializer_class = ItemSerializer
 
 class CategoryItemsListView(generics.ListAPIView):
     serializer_class = ItemSerializer
@@ -29,4 +33,19 @@ class CategoryItemsListView(generics.ListAPIView):
             return self.model.objects.filter(**{self.filter_field: filter_value})
         return self.model.objects.all()
 
-                        
+class FilterListAPIView(generics.ListAPIView):
+    model = None
+
+class AddItemToCart(generics.CreateAPIView):
+    serializer_class = EmptySerializer
+    def post(self, request):
+        item_id = request.data.get('item_id')
+        user_id = request.dtat.get('user_id')
+
+        if not item_id or not user_id:
+            return Response({'message': 'not specified item_id or user_id'}, status=status.HTTP_400_BAD_REQUEST)
+
+        cart_key = f"user:{user_id}:cart"
+        redis_connection.sadd(cart_key, item_id)
+
+        return Response({'message': 'Product successfully added to cart'}, status=status.HTTP_201_CREATED)
