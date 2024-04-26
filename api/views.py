@@ -1,15 +1,10 @@
-import redis
 from rest_framework import generics, status
 from rest_framework.response import Response
 from .models import *
+from dependency import *
 from django.db.models import Model
 from .serializers import CategorySerializer, UserSrializer, ItemSerializer, EmptySerializer
 
-# Connecting to redis
-REDIS_HOST = 'localhost'
-REDIS_PORT = 6379
-REDIS_DB = 0
-redis_connection = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
 class CategoryAPIView(generics.ListAPIView):
         queryset = Category.objects.all()
