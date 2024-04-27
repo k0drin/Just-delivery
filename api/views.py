@@ -1,7 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from .models import *
-from dependency import *
+from JustDelivery.dependency import redis_connection
 from django.db.models import Model
 from .serializers import CategorySerializer, UserSrializer, ItemSerializer, EmptySerializer
 

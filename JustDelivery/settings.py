@@ -1,6 +1,9 @@
 from pathlib import Path
-from dependency import *
 
+# Redis
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
