@@ -21,3 +21,13 @@ class RedisStorage:
         """Deletes a field from a hash stored in Redis."""
         self.client.hdel(key, field)
 
+    def add_to_cart(self, user_id, product_id):
+        self.client.sadd(f"user:{user_id}:cart", product_id)
+
+    def remove_from_cart(self, user_id, product_id):
+        self.client.srem(f"user:{user_id}:cart", product_id)
+
+    def get_order_item(self, user_id):
+        return self.client.smembers(f"user:{user_id}:cart")
+
+

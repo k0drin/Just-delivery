@@ -4,15 +4,19 @@ from .models import *
 from JustDelivery.dependency import redis_connection
 from django.db.models import Model
 from .serializers import CategorySerializer, UserSrializer, ItemSerializer, EmptySerializer
-
+from django.http import JsonResponse
+from django.views.generic import View
+from .services.redis_storage import RedisStorage
 
 class CategoryAPIView(generics.ListAPIView):
         queryset = Category.objects.all()
         serializer_class = CategorySerializer
 
+
 class UserAPIView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSrializer
+
 
 class CategoryItemsListView(generics.ListAPIView):
     serializer_class = ItemSerializer
@@ -27,6 +31,7 @@ class CategoryItemsListView(generics.ListAPIView):
         if filter_value is not None:
             return self.model.objects.filter(**{self.filter_field: filter_value})
         return self.model.objects.all()
+
 
 class FilterListAPIView(generics.ListAPIView):
     model = None
@@ -44,3 +49,17 @@ class AddItemToCart(generics.CreateAPIView):
         redis_connection.sadd(cart_key, item_id)
 
         return Response({'message': 'Product successfully added to cart'}, status=status.HTTP_201_CREATED)
+
+
+class AddItemToOrderView(View):
+    def post(self, request):
+        user_id = request.POST.get('user_id')
+        product_id = request.POST.get('product_id')
+        
+        if not user_id or not product_id:
+            return JsonResponse({'error': 'user_id and product_id are required'}, status=400)
+        
+        redis_storage = RedisStorage()
+        redis_storage.add_to_cart(user_id, product_id)
+        
+        return JsonResponse({'success': True})
