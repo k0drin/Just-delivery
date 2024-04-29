@@ -1,7 +1,6 @@
 from JustDelivery.dependency import redis_connection as conn
-from JustDelivery.services.redis_storage import RedisStorage
+from .redis_storage import RedisStorage
 
-order_container = OrderContainer(1, RedisStorage(conn))
 
 class OrderContainer:
     def __init__(self, user_id, storage):
@@ -21,3 +20,4 @@ class OrderContainer:
         return self.storage.get_hash(f"order:{self.user_id}")
 
 
+order_container = OrderContainer(1, RedisStorage(conn))

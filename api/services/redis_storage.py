@@ -1,14 +1,16 @@
-from dependency import *
+import redis
+from JustDelivery.dependency import redis_connection as conn
+
 
 class RedisStorage:
-    def __init__(self):
+    def __init__(self, conn):
         self.client = redis.Redis(
             host='localhost',
             port=6379,
             db=0,
             decode_responses=True
         )
-    
+
     def set_hash(self, key, field, value):
         """Sets a value in a hash stored in Redis."""
         self.client.hset(key, field, value)
@@ -20,14 +22,4 @@ class RedisStorage:
     def delete_hash_field(self, key, field):
         """Deletes a field from a hash stored in Redis."""
         self.client.hdel(key, field)
-
-    def add_to_cart(self, user_id, product_id):
-        self.client.sadd(f"user:{user_id}:cart", product_id)
-
-    def remove_from_cart(self, user_id, product_id):
-        self.client.srem(f"user:{user_id}:cart", product_id)
-
-    def get_order_item(self, user_id):
-        return self.client.smembers(f"user:{user_id}:cart")
-
 

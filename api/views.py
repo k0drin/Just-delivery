@@ -1,4 +1,5 @@
 from rest_framework import generics, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
 from JustDelivery.dependency import redis_connection
@@ -7,6 +8,8 @@ from .serializers import CategorySerializer, UserSrializer, ItemSerializer, Empt
 from django.http import JsonResponse
 from django.views.generic import View
 from .services.redis_storage import RedisStorage
+from .services.order_container import OrderContainer
+
 
 class CategoryAPIView(generics.ListAPIView):
         queryset = Category.objects.all()
@@ -36,6 +39,7 @@ class CategoryItemsListView(generics.ListAPIView):
 class FilterListAPIView(generics.ListAPIView):
     model = None
 
+
 class AddItemToCart(generics.CreateAPIView):
     serializer_class = EmptySerializer
     def post(self, request):
@@ -51,15 +55,17 @@ class AddItemToCart(generics.CreateAPIView):
         return Response({'message': 'Product successfully added to cart'}, status=status.HTTP_201_CREATED)
 
 
-class AddItemToOrderView(View):
+class AddItemToOrderView(APIView):
     def post(self, request):
-        user_id = request.POST.get('user_id')
-        product_id = request.POST.get('product_id')
-        
+        user_id = request.data.get('user_id')
+        product_id = request.data.get('product_id')
+
         if not user_id or not product_id:
-            return JsonResponse({'error': 'user_id and product_id are required'}, status=400)
-        
-        redis_storage = RedisStorage()
-        redis_storage.add_to_cart(user_id, product_id)
-        
-        return JsonResponse({'success': True})
+            return Response({'error': 'user_id and product_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        order_container = OrderContainer(user_id, RedisStorage(conn))
+        order_container.add_to_cart(product_id)
+
+        return Response({'message': 'Product successfully added to order'}, status=status.HTTP_201_CREATED)
+
+
