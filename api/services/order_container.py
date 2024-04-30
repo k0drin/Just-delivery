@@ -20,4 +20,3 @@ class OrderContainer:
         return self.storage.get_hash(f"order:{self.user_id}")
 
 
-order_container = OrderContainer(1, RedisStorage(conn))

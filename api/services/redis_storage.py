@@ -3,14 +3,13 @@ from JustDelivery.dependency import redis_connection as conn
 
 
 class RedisStorage:
-    def __init__(self, conn):
-        self.client = redis.Redis(
-            host='localhost',
-            port=6379,
-            db=0,
-            decode_responses=True
-        )
-
+    def __init__(self, redis: redis.Redis):
+        self.redis: redis.Redis = redis
+        host='localhost', 
+        port=6379,
+        db=0,
+        decode_response=True
+        
     def set_hash(self, key, field, value):
         """Sets a value in a hash stored in Redis."""
         self.client.hset(key, field, value)

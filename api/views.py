@@ -2,7 +2,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
-from JustDelivery.dependency import redis_connection
+from JustDelivery.dependency import redis_connection as conn
 from django.db.models import Model
 from .serializers import CategorySerializer, UserSrializer, ItemSerializer, EmptySerializer
 from django.http import JsonResponse
@@ -50,7 +50,7 @@ class AddItemToCart(generics.CreateAPIView):
             return Response({'message': 'not specified item_id or user_id'}, status=status.HTTP_400_BAD_REQUEST)
 
         cart_key = f"user:{user_id}:cart"
-        redis_connection.sadd(cart_key, item_id)
+        conn.sadd(cart_key, item_id)
 
         return Response({'message': 'Product successfully added to cart'}, status=status.HTTP_201_CREATED)
 
@@ -67,5 +67,37 @@ class AddItemToOrderView(APIView):
         order_container.add_to_cart(product_id)
 
         return Response({'message': 'Product successfully added to order'}, status=status.HTTP_201_CREATED)
+
+
+class RemoveItemFromOrderView(APIView):
+    def post(self, request):
+        user_id = request.data.get('user_id')
+        product_id = request.data.get('product_id')
+
+        if not user_id or not product_id:
+            return Response({'error': 'user_id and product_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        order_container = OrderContainer(user_id, RedisStorage(conn))
+        order_container.remove_from_cart(product_id)
+
+        return Response({'message': 'Product successfully removed from order'}, status=status.HTTP_200_OK)
+    
+
+class OrderPreviewView(APIView):
+    def post(self, request):
+        user_id = request.data.get('user_id')
+        if not user_id:
+            return Response({'error': 'user_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        order_container = OrderContainer(user_id, RedisStorage(conn))
+        order_items = order_container.get_order_items()
+        total_sum = sum(order_items.values())
+
+        return Response({'order_items': order_items, 'total_sum': total_sum}, status=status.HTTP_200_OK)
+    
+
+
+    
+
 
 
