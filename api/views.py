@@ -94,10 +94,32 @@ class OrderPreviewView(APIView):
         total_sum = sum(order_items.values())
 
         return Response({'order_items': order_items, 'total_sum': total_sum}, status=status.HTTP_200_OK)
-    
 
 
-    
+class OrderCheckoutView(APIView):
+    def post(self, request):
+        user_id = request.data.get('user_id')
 
+        if not user_id:
+            return Response({'error': 'user_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        order_container = OrderContainer(user_id, RedisStorage(conn))
+        order_items = order_container.get_order_items()
+        order = Order.objects.create(user_id=user_id, items=order_items)
+
+        return Response({'message': 'Order finalized successfully', 'order_id': order.id}, status=status.HTTP_201_CREATED)
+
+
+class UserOrdersListView(APIView):
+    def get(self, request):
+        user_id = request.query_params.get('user_id')
+
+        if not user_id:
+            return Response({'error': 'user_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        orders = Order.objects.filter(user_id=user_id)
+
+        serialized_orders = [{'id': order.id, 'items': order.items} for order in orders]
+        return Response(serialized_orders, status=status.HTTP_200_OK)
 
 
