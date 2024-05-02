@@ -114,7 +114,7 @@ class UserOrdersListView(APIView):
     def get(self, request):
         user_id = request.query_params.get('user_id')
 
-        if not user_id:
+        if not user_id and user_id is None:
             return Response({'error': 'user_id is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         orders = Order.objects.filter(user_id=user_id)
