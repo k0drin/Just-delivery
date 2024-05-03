@@ -14,7 +14,7 @@ admin.site.register(Category, AdminCategory)
 
 #admin.site.register(User)
 class AdminUser(admin.ModelAdmin):
-    list_dispalay = ('first_name', 'last_name', 'phone_number', 'email', 'address', 'time_create')
+    list_display = ('id', 'first_name', 'last_name', 'phone_number', 'email', 'address', 'time_create')
     search_fields = ('last_name', 'phone_number', 'address')
     list_filter = ['time_update']
 
