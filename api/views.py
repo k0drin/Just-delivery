@@ -40,21 +40,6 @@ class FilterListAPIView(generics.ListAPIView):
     model = None
 
 
-class AddItemToCart(generics.CreateAPIView):
-    serializer_class = EmptySerializer
-    def post(self, request):
-        item_id = request.data.get('item_id')
-        user_id = request.dtat.get('user_id')
-
-        if not item_id or not user_id:
-            return Response({'message': 'not specified item_id or user_id'}, status=status.HTTP_400_BAD_REQUEST)
-
-        cart_key = f"user:{user_id}:cart"
-        conn.sadd(cart_key, item_id)
-
-        return Response({'message': 'Product successfully added to cart'}, status=status.HTTP_201_CREATED)
-
-
 class AddItemToOrderView(APIView):
     def post(self, request):
         user_id = request.data.get('user_id')
