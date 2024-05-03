@@ -2,7 +2,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
-from JustDelivery.dependency import redis_connection as conn
+from JustDelivery.dependency import get_redis
 from django.db.models import Model
 from .serializers import (
     CategorySerializer,
@@ -44,7 +44,7 @@ class AddItemToOrderView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        order_container = OrderContainer(user_id, RedisStorage(conn))
+        order_container = OrderContainer(user_id, RedisStorage(get_redis()))
         order_container.add_to_cart(product_id, 1)
 
         return Response(
