@@ -34,5 +34,18 @@ class AdminUser(admin.ModelAdmin):
     search_fields = ("last_name", "phone_number", "address")
     list_filter = ["time_update"]
 
-
 admin.site.register(User, AdminUser)
+
+class AdminItem(admin.ModelAdmin):
+    model = Item
+    list_display = (
+            "name",
+            "price",
+            "in_stock",
+            "category",
+        )
+    search_fields = ("name",)
+    list_filter = ("category",)
+
+
+admin.site.register(Item, AdminItem)

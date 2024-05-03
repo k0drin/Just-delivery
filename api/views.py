@@ -54,9 +54,14 @@ class AddItemToOrderView(APIView):
 
 
 class RemoveItemFromOrderView(APIView):
+    def dispatch(self, request, *args, **kwargs):
+        self.conn = get_redis()  
+        return super().dispatch(request, *args, **kwargs)
+
     def post(self, request):
         user_id = request.data.get("user_id")
         product_id = request.data.get("product_id")
+    
 
         if not user_id or not product_id:
             return Response(
@@ -64,7 +69,7 @@ class RemoveItemFromOrderView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        order_container = OrderContainer(user_id, RedisStorage(conn))
+        order_container = OrderContainer(user_id, RedisStorage(self.conn))
         order_container.remove_from_cart(product_id)
 
         return Response(
@@ -74,6 +79,10 @@ class RemoveItemFromOrderView(APIView):
 
 
 class OrderPreviewView(APIView):
+    def dispatch(self, request, *args, **kwargs):
+        self.conn = get_redis()  
+        return super().dispatch(request, *args, **kwargs)
+    
     def post(self, request):
         user_id = request.data.get("user_id")
         if not user_id:
@@ -81,7 +90,7 @@ class OrderPreviewView(APIView):
                 {"error": "user_id is required"}, status=status.HTTP_400_BAD_REQUEST
             )
 
-        order_container = OrderContainer(user_id, RedisStorage(conn))
+        order_container = OrderContainer(user_id, RedisStorage(self.conn))
         order_items = order_container.get_order_items()
         total_sum = sum(order_items.values())
 

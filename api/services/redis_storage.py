@@ -10,3 +10,6 @@ class RedisStorage:
 
     def list_pop(self, key):
         return self.conn.lpop(key)
+    
+    def list_length(self, key):
+        return self.conn.llen(key)
