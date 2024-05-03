@@ -64,7 +64,7 @@ class AddItemToOrderView(APIView):
             return Response({'error': 'user_id and product_id are required'}, status=status.HTTP_400_BAD_REQUEST)
 
         order_container = OrderContainer(user_id, RedisStorage(conn))
-        order_container.add_to_cart(product_id)
+        order_container.add_to_cart(product_id, 1)
 
         return Response({'message': 'Product successfully added to order'}, status=status.HTTP_201_CREATED)
 
