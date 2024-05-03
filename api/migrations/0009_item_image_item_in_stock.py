@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0008_item'),
+        ("api", "0008_item"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='item',
-            name='image',
-            field=models.ImageField(default='', upload_to='meat.jpeg'),
+            model_name="item",
+            name="image",
+            field=models.ImageField(default="", upload_to="meat.jpeg"),
         ),
         migrations.AddField(
-            model_name='item',
-            name='in_stock',
+            model_name="item",
+            name="in_stock",
             field=models.BooleanField(default=True),
         ),
     ]

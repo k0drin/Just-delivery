@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0005_user'),
+        ("api", "0005_user"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='is_published',
+            model_name="user",
+            name="is_published",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='time_create',
+            model_name="user",
+            name="time_create",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='time_update',
+            model_name="user",
+            name="time_update",
             field=models.DateTimeField(auto_now=True),
         ),
     ]

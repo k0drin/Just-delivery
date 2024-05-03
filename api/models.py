@@ -2,6 +2,7 @@ from django.db import models
 import hashlib
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 class Category(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=1000)
@@ -16,11 +17,12 @@ class Category(models.Model):
 
     # Чтобы была кнопка "смотреть на сайте"
     def get_absolute_url(self):
-        return reverse('post', kwargs={'post_id': self.pk})
+        return reverse("post", kwargs={"post_id": self.pk})
+
 
 class HashField(models.CharField):
     def __init__(self, *args, **kwargs):
-        kwargs['max_length'] = 64  # SHA-256 hash size in hex is 64 characters
+        kwargs["max_length"] = 64  # SHA-256 hash size in hex is 64 characters
         super().__init__(*args, **kwargs)
 
     def pre_save(self, model_instance, add):
@@ -41,6 +43,7 @@ class HashField(models.CharField):
         """Converts the value from the database or from the serializer into the correct Python object."""
         return value
 
+
 class User(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -55,11 +58,12 @@ class User(models.Model):
     def __str__(self):
         return self.address
 
+
 class Item(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='', default='')
+    image = models.ImageField(upload_to="", default="")
     in_stock = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 

@@ -2,6 +2,7 @@ import redis
 from JustDelivery.dependency import redis_connection as conn
 from .order_container import Item
 
+
 class RedisStorage:
     def __init__(self, conn):
         self.conn = conn

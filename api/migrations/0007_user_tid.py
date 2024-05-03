@@ -7,13 +7,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0006_user_is_published_user_time_create_user_time_update'),
+        ("api", "0006_user_is_published_user_time_create_user_time_update"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='tid',
+            model_name="user",
+            name="tid",
             field=api.models.HashField(max_length=64, null=True),
         ),
     ]

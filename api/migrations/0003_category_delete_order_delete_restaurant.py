@@ -6,29 +6,37 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0002_order'),
+        ("api", "0002_order"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('Appetizers', models.CharField(max_length=255)),
-                ('Entrees', models.CharField(max_length=255)),
-                ('Sides', models.CharField(max_length=255)),
-                ('Desserts', models.CharField(max_length=255)),
-                ('Drinks', models.CharField(max_length=255)),
-                ('time_create', models.DateTimeField(auto_now=True)),
-                ('time_update', models.DateTimeField(auto_now=True)),
-                ('is_published', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("Appetizers", models.CharField(max_length=255)),
+                ("Entrees", models.CharField(max_length=255)),
+                ("Sides", models.CharField(max_length=255)),
+                ("Desserts", models.CharField(max_length=255)),
+                ("Drinks", models.CharField(max_length=255)),
+                ("time_create", models.DateTimeField(auto_now=True)),
+                ("time_update", models.DateTimeField(auto_now=True)),
+                ("is_published", models.BooleanField(default=True)),
             ],
         ),
         migrations.DeleteModel(
-            name='Order',
+            name="Order",
         ),
         migrations.DeleteModel(
-            name='Restaurant',
+            name="Restaurant",
         ),
     ]
