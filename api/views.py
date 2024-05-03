@@ -14,7 +14,7 @@ from django.http import JsonResponse
 from django.views.generic import View
 from .services.redis_storage import RedisStorage
 from .services.order_container import OrderContainer
-
+from .generics import FilterListAPIView
 
 class CategoryAPIView(generics.ListAPIView):
     queryset = Category.objects.all()
@@ -26,29 +26,11 @@ class UserAPIView(generics.CreateAPIView):
     serializer_class = UserSrializer
 
 
-class CategoryItemsListView(generics.ListAPIView):
+class CategoryItemsListView(FilterListAPIView):
     serializer_class = ItemSerializer
     model = Item
     filter_field = "name"
 
-    def get_queryset(self):
-        if (
-            self.model is None
-            or self.serializer_class is None
-            or self.filter_field is None
-        ):
-            raise ValueError(
-                "Ensure 'model', 'serializer_class', and 'filter_field' are set."
-            )
-
-        filter_value = self.kwargs.get(self.filter_field)
-        if filter_value is not None:
-            return self.model.objects.filter(**{self.filter_field: filter_value})
-        return self.model.objects.all()
-
-
-class FilterListAPIView(generics.ListAPIView):
-    model = None
 
 
 class AddItemToOrderView(APIView):
