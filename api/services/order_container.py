@@ -4,7 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class Item:
     item_id: str
-    quantity: int # temporarily : )
+    quantity: int 
 
     def to_json(self) -> str:
         return json.dumps(self.__dict__)
@@ -35,10 +35,8 @@ class OrderContainer:
         all_items_json = self.storage.list_range(cart_key, 0, -1)
 
         for item_json in all_items_json:
-            item_data = json.loads(item_json)
-            item_id = item_data.get("item_id")
-            quantity = item_data.get("quantity", 0)
-            order_items[item_id] = order_items.get(item_id, 0) + quantity
+            item = Item.from_json(item_json)
+            order_items[item.item_id] = order_items.get(item.item_id, 0) + item.quantity
 
         return order_items
        
