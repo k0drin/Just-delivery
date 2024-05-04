@@ -9,7 +9,10 @@ class RedisStorage:
         self.conn.lpush(key, value)
 
     def list_pop(self, key):
-        return self.conn.lpop(key)
+        return self.conn.lpop(key)  
     
     def list_length(self, key):
         return self.conn.llen(key)
+    
+    def list_range(self, key, start, stop):
+        return self.conn.lrange(key, start, stop)

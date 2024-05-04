@@ -60,17 +60,17 @@ class RemoveItemFromOrderView(APIView):
 
     def post(self, request):
         user_id = request.data.get("user_id")
-        product_id = request.data.get("product_id")
+        item_id = request.data.get("product_id")
+        quantity = 1
     
-
-        if not user_id or not product_id:
+        if not user_id or not item_id:
             return Response(
                 {"error": "user_id and product_id are required"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         order_container = OrderContainer(user_id, RedisStorage(self.conn))
-        order_container.remove_from_cart(product_id)
+        order_container.remove_from_cart(item_id, quantity)
 
         return Response(
             {"message": "Product successfully removed from order"},
@@ -108,7 +108,7 @@ class OrderCheckoutView(APIView):
             return Response(
                 {"error": "user_id is required"}, status=status.HTTP_400_BAD_REQUEST
             )
-
+        conn = get_redis()
         order_container = OrderContainer(user_id, RedisStorage(conn))
         order_items = order_container.get_order_items()
         order = Order.objects.create(user_id=user_id, items=order_items)
