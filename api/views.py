@@ -29,7 +29,7 @@ class UserAPIView(generics.CreateAPIView):
 class CategoryItemsListView(FilterListAPIView):
     serializer_class = ItemSerializer
     model = Item
-    filter_field = "name"
+    filter_field = "category_id"
 
 
 
