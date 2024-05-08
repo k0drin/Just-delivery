@@ -4,7 +4,7 @@ from .models import *
 # admin.site.register(Category)
 
 
-# Представление модели в интерфейсе администратора
+# Презентація моделі в інтерфейсі адміністратора
 class AdminCategory(admin.ModelAdmin):
     list_display = (
         "title",
@@ -39,6 +39,7 @@ admin.site.register(User, AdminUser)
 class AdminItem(admin.ModelAdmin):
     model = Item
     list_display = (
+            "id",   
             "name",
             "price",
             "in_stock",

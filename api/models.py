@@ -6,16 +6,16 @@ from phonenumber_field.modelfields import PhoneNumberField
 class Category(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=1000)
-    # Для логирования
+    # For loggin
     time_create = models.DateTimeField(auto_now=True)
     time_update = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=True)
 
-    # Для отображения названий
+    # Для відображення назв
     def __str__(self):
         return self.title
 
-    # Чтобы была кнопка "смотреть на сайте"
+    # Для того щоб була кнопка "дивитись на сайті"
     def get_absolute_url(self):
         return reverse("post", kwargs={"post_id": self.pk})
 
