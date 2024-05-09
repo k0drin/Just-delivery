@@ -11,7 +11,7 @@ router = Router()
 @router.message(CommandStart())
 async def cmd_start(message: Message):
     await message.answer(
-        f"Вітаю👋<b> {message.from_user.full_name}</b>. Це бот для доставки від компанії Just-Delivery🚀",
+        f"Вітаю👋<b> {message.from_user.full_name}</b>. Це бот для доставки від компанії Піцерія🍕",
         parse_mode=ParseMode.HTML, reply_markup=kb.main_keyboard
     )           
 
