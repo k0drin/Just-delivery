@@ -1,20 +1,17 @@
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import *
+from .models import Category, User, Item, Order
 from JustDelivery.dependency import get_redis
-from django.db.models import Model
 from .serializers import (
     CategorySerializer,
     UserSrializer,
     ItemSerializer,
-    EmptySerializer,
 )
-from django.http import JsonResponse
-from django.views.generic import View
 from .services.redis_storage import RedisStorage
 from .services.order_container import OrderContainer
 from .generics import FilterListAPIView
+
 
 class CategoryAPIView(generics.ListAPIView):
     queryset = Category.objects.all()
@@ -30,7 +27,6 @@ class CategoryItemsListView(FilterListAPIView):
     serializer_class = ItemSerializer
     model = Item
     filter_field = "category_id"
-
 
 
 class AddItemToOrderView(APIView):
@@ -55,14 +51,14 @@ class AddItemToOrderView(APIView):
 
 class RemoveItemFromOrderView(APIView):
     def dispatch(self, request, *args, **kwargs):
-        self.conn = get_redis()  
+        self.conn = get_redis()
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request):
         user_id = request.data.get("user_id")
         item_id = request.data.get("product_id")
         quantity = 1
-    
+
         if not user_id or not item_id:
             return Response(
                 {"error": "user_id and product_id are required"},
@@ -80,9 +76,9 @@ class RemoveItemFromOrderView(APIView):
 
 class OrderPreviewView(APIView):
     def dispatch(self, request, *args, **kwargs):
-        self.conn = get_redis()  
+        self.conn = get_redis()
         return super().dispatch(request, *args, **kwargs)
-    
+
     def post(self, request):
         user_id = request.data.get("user_id")
         if not user_id:

@@ -1,5 +1,6 @@
 from rest_framework import generics
 
+
 class FilterListAPIView(generics.ListAPIView):
     model = None
     filter_field = None
