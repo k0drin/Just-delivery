@@ -1,0 +1,39 @@
+# Обрабатываем все Python файлы как текст, чтобы сохранить переносы строк корректно
+*.py text eol=lf
+
+# Для всех файлов шаблонов, если используются HTML или другие текстовые форматы
+*.html text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.xml text eol=lf
+
+*/migrations/*.py text eol=lf
+
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.tiff binary
+*.bmp binary
+*.webp binary
+*.ico binary
+
+*.pdf binary
+*.xlsx binary
+*.xls binary
+*.docx binary
+
+*.sqlite3 binary
+*.db binary
+
+*.log binary
+
+*.cache binary
+*.log binary
+
+.env binary
+
+static/* binary
+media/* binary
