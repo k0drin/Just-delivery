@@ -1,0 +1,58 @@
+# Python files (standard diff and text settings)
+*.py text eol=lf
+
+# Django migration files (Python, but often with specific line endings for compatibility)
+migrations/*.py text eol=lf
+
+# JSON files (text files, with LF endings)
+*.json text eol=lf
+
+# YAML files (often used for configurations)
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Static files (CSS, JavaScript, images, etc.) - binary, no diff
+*.css binary
+*.js binary
+*.html binary
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.svg binary
+*.woff binary
+*.woff2 binary
+*.eot binary
+*.ttf binary
+*.otf binary
+*.ico binary
+
+# Database file (SQLite, if using in dev)
+*.db binary
+
+# Logs (treat as binary or text, depending on use case)
+*.log binary
+
+# Django templates - treat as text files (LF line endings)
+*.html text eol=lf
+
+# Docker-related files (typically text files)
+*.Dockerfile text eol=lf
+docker-compose.yml text eol=lf
+
+# Markdown files (often used for documentation)
+*.md text eol=lf
+
+# Test-related files (usually text, like .feature files for testing)
+*.feature text eol=lf
+
+# Virtual environment and build artifacts (exclude from Git)
+.venv/* export-ignore
+env/* export-ignore
+*.pyc export-ignore
+*.pyo export-ignore
+*.pyd export-ignore
+__pycache__/ export-ignore
+
+# Include the standard settings for CRLF conversions (important for cross-platform development)
+* text=auto
